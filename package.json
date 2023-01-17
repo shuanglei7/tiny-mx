@@ -1,11 +1,12 @@
 {
   "version": "1.0.0",
+  "name": "tiny-mx",
+  "author": "shuanglei7",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "engines": {
     "node": ">=10"
@@ -19,14 +20,24 @@
     "size": "size-limit",
     "analyze": "size-limit --why"
   },
-  "peerDependencies": {},
   "husky": {
     "hooks": {
       "pre-commit": "tsdx lint"
     }
   },
-  "name": "tiny-mx",
-  "author": "shuanglei7",
+  "peerDependencies": {},
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^8.1.1",
+    "husky": "^8.0.3",
+    "size-limit": "^8.1.1",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.4.1",
+    "typescript": "^4.9.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ShuangLei7/tiny-mx.git"
+  },
   "module": "dist/tiny-mx.esm.js",
   "size-limit": [
     {
@@ -37,13 +48,5 @@
       "path": "dist/tiny-mx.esm.js",
       "limit": "10 KB"
     }
-  ],
-  "devDependencies": {
-    "@size-limit/preset-small-lib": "^8.1.1",
-    "husky": "^8.0.3",
-    "size-limit": "^8.1.1",
-    "tsdx": "^0.14.1",
-    "tslib": "^2.4.1",
-    "typescript": "^4.9.4"
-  }
+  ]
 }
