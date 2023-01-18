@@ -89,24 +89,6 @@ mx.event.off('event'); // 移除该事件的所有监听器
 mx.event.has('event');
 ```
 
-### engine
-
-```javascript
-// process：event响应方法，param非必填
-mx.engine.register('process', (param) => {
-  console.log('param', param);
-  // 修改store数据
-  mx.store.update({
-    status: 'test',
-  });
-});
-
-// event：注册event并挂载一个process
-mx.engine.binder({
-  event: 'process',
-});
-```
-
 ## 扩展
 
 Mx 的每个模块提供了一定的 hooks 以便支持更加灵活的扩展能力。
