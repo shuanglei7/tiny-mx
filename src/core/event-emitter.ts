@@ -50,7 +50,7 @@ export default class EventEmitter {
       return;
     }
     this._events[evtName] = this._events[evtName].filter(
-      handler => handler.listener !== fn
+      (handler) => handler.listener !== fn
     );
   }
 
@@ -66,7 +66,7 @@ export default class EventEmitter {
     const evts = this._events[evtName];
 
     if (evts) {
-      return evts.map(handler =>
+      return evts.map((handler) =>
         isMakeupCall
           ? handler.needMakeup && handler.listener(...args)
           : handler.listener(...args)

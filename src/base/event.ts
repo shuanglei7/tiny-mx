@@ -10,10 +10,10 @@ export interface EmitRecord {
 }
 
 export class Event extends Hook {
-  emitter: EventEmitter;
+  private emitter: EventEmitter;
   private _emptyEmit: EmitRecord[] = [];
 
-  get _events() {
+  private get _events() {
     return this.emitter._events;
   }
 
@@ -25,14 +25,14 @@ export class Event extends Hook {
 
   private runRemain(eventName: string) {
     this._emptyEmit
-      .filter(e => e.eventName === eventName)
-      .forEach(payload => {
+      .filter((e) => e.eventName === eventName)
+      .forEach((payload) => {
         this.emitter.emit(
           { eventName: payload.eventName, isMakeupCall: true },
           ...payload.args
         );
       });
-    this._emptyEmit = this._emptyEmit.filter(e => e.eventName !== eventName);
+    this._emptyEmit = this._emptyEmit.filter((e) => e.eventName !== eventName);
   }
 
   on(eventName: string, listener: Function, needMakeup = true) {
@@ -65,7 +65,7 @@ export class Event extends Hook {
     } else {
       if (
         this.emitter._events[eventName].every(
-          handler => handler && handler.needMakeup === false
+          (handler) => handler && handler.needMakeup === false
         )
       ) {
         this._emptyEmit.push({ eventName, args });

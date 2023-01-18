@@ -6,15 +6,15 @@ const namespace = '__MX_STORE__';
 type RecordObject<T = any> = Record<string, T>;
 
 export class Store {
-  store: RecordObject = {};
-  asyncUpdateList: any[] = [];
-  nextTickCalls: Function[] = [];
-  attachList: any[] = [];
-  pathChangeMap: RecordObject<Array<(data?: any) => void>> = {};
+  private store: RecordObject = {};
+  private asyncUpdateList: any[] = [];
+  private nextTickCalls: Function[] = [];
+  private attachList: any[] = [];
+  private pathChangeMap: RecordObject<Array<(data?: any) => void>> = {};
 
   private asyncUpdateTicking = false;
 
-  _addToStore(name: string, data: any) {
+  private _addToStore(name: string, data: any) {
     if (this.store[name]) {
       console.error(
         'you are setting store namespace [' + name + '] more than once'
@@ -29,12 +29,12 @@ export class Store {
     this._updateHandler(path);
   }
 
-  _handlePathChange(path: any) {
+  private _handlePathChange(path: any) {
     if (!this.pathChangeMap[path]) {
       return;
     }
 
-    this.pathChangeMap[path].forEach(listener => {
+    this.pathChangeMap[path].forEach((listener) => {
       const data = dataManager.get(this.store, this._formatPath(path));
       listener(data);
     });
@@ -114,7 +114,7 @@ export class Store {
     return this.store;
   }
 
-  _updateChildPath(path: any) {
+  private _updateChildPath(path: any) {
     const keys = Object.keys(this.pathChangeMap);
     for (let k in keys) {
       let key = keys[k];
@@ -128,7 +128,7 @@ export class Store {
     }
   }
 
-  _pathUpdate(path: any) {
+  private _pathUpdate(path: any) {
     this._updateChildPath(path);
     path = path.split('.');
     let p = '';
@@ -138,7 +138,7 @@ export class Store {
     }
   }
 
-  _updateHandler(path = '') {
+  private _updateHandler(path = '') {
     //全量订阅
     for (let i in this.attachList) {
       this.attachList[i](this.store, path);
@@ -148,31 +148,31 @@ export class Store {
     this._pathUpdate(path);
   }
 
-  _asyncUpdateHandler() {
+  private _asyncUpdateHandler() {
     Promise.resolve()
       .then(() => {
         const uniqueList: any[] = [];
-        this.asyncUpdateList.forEach(item => {
-          if (!uniqueList.find(tar => tar.path === item.path)) {
+        this.asyncUpdateList.forEach((item) => {
+          if (!uniqueList.find((tar) => tar.path === item.path)) {
             uniqueList.push(item);
           }
         });
-        uniqueList.forEach(item => {
+        uniqueList.forEach((item) => {
           this._updateHandler(item.path);
         });
-        this.asyncUpdateList.forEach(item => {
+        this.asyncUpdateList.forEach((item) => {
           item.resolve(
             dataManager.get(this.store, this._formatPath(item.path))
           );
         });
-        this.nextTickCalls.forEach(cb => {
+        this.nextTickCalls.forEach((cb) => {
           cb();
         });
         this.asyncUpdateTicking = false;
         this.asyncUpdateList = [];
         this.nextTickCalls = [];
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
       });
   }
@@ -181,18 +181,20 @@ export class Store {
     this.attachList.push(cb);
   }
 
-  _addToPathChange(path: string, cb: (data: any) => any) {
+  private _addToPathChange(path: string, cb: (data: any) => any) {
     if (!this.pathChangeMap[path]) {
       this.pathChangeMap[path] = [];
     }
     this.pathChangeMap[path].push(cb);
   }
 
-  _removeFromPathChange(path: string, cb: (data: any) => any) {
+  private _removeFromPathChange(path: string, cb: (data: any) => any) {
     if (!this.pathChangeMap[path]) {
       return;
     }
-    this.pathChangeMap[path] = this.pathChangeMap[path].filter(fn => fn !== cb);
+    this.pathChangeMap[path] = this.pathChangeMap[path].filter(
+      (fn) => fn !== cb
+    );
   }
 
   on(path: string, cb: (data: any) => any, forceInit = false) {

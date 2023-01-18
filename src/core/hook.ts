@@ -62,7 +62,7 @@ export default class Hook {
    * @param {string} apiName
    * @param args
    */
-  _execHook(apiName: any, ...args: any[]) {
+  protected _execHook(apiName: any, ...args: any[]) {
     hookEmitter.emit.apply(hookEmitter, [
       getHookAPIName(this._hook_namespace, apiName),
       ...args,
@@ -74,7 +74,7 @@ export default class Hook {
     ]);
   }
 
-  _execHookAfter(apiName: any, ...args: any[]) {
+  protected _execHookAfter(apiName: any, ...args: any[]) {
     this._execHook.apply(this, [apiName, ...args]);
   }
 
@@ -109,7 +109,7 @@ export default class Hook {
    * @param {string} apiName
    * @param args
    */
-  _execHookBefore(apiName: any, ...args: any[]) {
+  protected _execHookBefore(apiName: any, ...args: any[]) {
     var apiResult = hookBeforeEmitter.emit.apply(hookBeforeEmitter, [
       getHookAPIName(this._hook_namespace, apiName),
       ...args,
