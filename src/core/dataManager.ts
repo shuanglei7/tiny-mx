@@ -4,14 +4,14 @@ import {
   combingPathKey,
   showError,
   setValue,
-} from '../utils/tool';
-import { THE_PARAMETER_IS_ILLEGAL } from '../utils/errorCode';
+} from "../utils/tool";
+import { THE_PARAMETER_IS_ILLEGAL } from "../utils/errorCode";
 
-export const get = <T>(data: T, path: string | number): T => {
+export const get = (data: any, path: string | number) => {
   const tempData = data;
   if (tempData == null) return tempData;
   path = toString(path);
-  if (path === '') return tempData;
+  if (path === "") return tempData;
   if (!isComplexPath(path)) return tempData[path];
   let ret;
   const keys = combingPathKey({ path }).keys;

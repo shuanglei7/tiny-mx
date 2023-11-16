@@ -30,7 +30,7 @@ export default class Hook {
    * @param apiName
    * @param fn
    */
-  hook(apiName: any, fn: any) {
+  hook(apiName: string, fn: any) {
     if (typeof apiName === 'function') {
       hookEmitter.on(this._hook_namespace, apiName);
     } else {
@@ -38,7 +38,7 @@ export default class Hook {
     }
   }
 
-  hookAfter(apiName: any, fn: any) {
+  hookAfter(apiName: string, fn: any) {
     this.hook(apiName, fn);
   }
   /**
@@ -46,7 +46,7 @@ export default class Hook {
    * @param apiName
    * @param fn
    */
-  unhook(apiName: any, fn: any) {
+  unhook(apiName: string, fn: any) {
     if (typeof apiName === 'function') {
       hookEmitter.off(this._hook_namespace, apiName);
     } else {
@@ -54,7 +54,7 @@ export default class Hook {
     }
   }
 
-  unhookAfter(apiName: any, fn: any) {
+  unhookAfter(apiName: string, fn: any) {
     this.unhook(apiName, fn);
   }
   /**
@@ -62,7 +62,7 @@ export default class Hook {
    * @param {string} apiName
    * @param args
    */
-  protected _execHook(apiName: any, ...args: any[]) {
+  protected _execHook(apiName: string, ...args: any[]) {
     hookEmitter.emit.apply(hookEmitter, [
       getHookAPIName(this._hook_namespace, apiName),
       ...args,
@@ -74,7 +74,7 @@ export default class Hook {
     ]);
   }
 
-  protected _execHookAfter(apiName: any, ...args: any[]) {
+  protected _execHookAfter(apiName: string, ...args: any[]) {
     this._execHook.apply(this, [apiName, ...args]);
   }
 
@@ -83,7 +83,7 @@ export default class Hook {
    * @param apiName
    * @param fn
    */
-  hookBefore(apiName: any, fn: any) {
+  hookBefore(apiName: string, fn: any) {
     if (typeof apiName === 'function') {
       hookBeforeEmitter.on(this._hook_namespace, apiName);
     } else {
@@ -96,7 +96,7 @@ export default class Hook {
    * @param apiName
    * @param fn
    */
-  unhookBefore(apiName: any, fn: any) {
+  unhookBefore(apiName: string, fn: any) {
     if (typeof apiName === 'function') {
       hookBeforeEmitter.off(this._hook_namespace, apiName);
     } else {
@@ -109,7 +109,7 @@ export default class Hook {
    * @param {string} apiName
    * @param args
    */
-  protected _execHookBefore(apiName: any, ...args: any[]) {
+  protected _execHookBefore(apiName: string, ...args: any[]) {
     var apiResult = hookBeforeEmitter.emit.apply(hookBeforeEmitter, [
       getHookAPIName(this._hook_namespace, apiName),
       ...args,

@@ -1,8 +1,8 @@
-import EventEmitter from '../core/event-emitter';
-import Hook from '../core/hook';
-import { getInstance, setInstance } from '../utils/env';
+import EventEmitter from "../core/event-emitter";
+import Hook from "../core/hook";
+import { getInstance, setInstance } from "../utils/env";
 
-const namespace = '__MX_EVENT__';
+const namespace = "__MX_EVENT__";
 
 export interface EmitRecord {
   eventName: string;
@@ -35,8 +35,8 @@ export class Event extends Hook {
     this._emptyEmit = this._emptyEmit.filter((e) => e.eventName !== eventName);
   }
 
-  on(eventName: string, listener: Function, needMakeup = true) {
-    const metaName = 'on';
+  on(eventName: string, listener: (...args: any[]) => void, needMakeup = true) {
+    const metaName = "on";
     const shouldBreak =
       this._execHookBefore(metaName, eventName, listener) === false;
     if (!shouldBreak) return;
@@ -45,8 +45,8 @@ export class Event extends Hook {
     this._execHookAfter(metaName, eventName, listener);
   }
 
-  off(eventName: string, listener?: Function) {
-    const metaName = 'off';
+  off(eventName: string, listener?: (...args: any[]) => void) {
+    const metaName = "off";
     const shouldBreak =
       this._execHookBefore(metaName, eventName, listener) === false;
     if (!shouldBreak) return;
@@ -55,7 +55,7 @@ export class Event extends Hook {
   }
 
   emit(eventName: string, ...args: any) {
-    const metaName = 'emit';
+    const metaName = "emit";
     const shouldBreak =
       this._execHookBefore(metaName, eventName, ...args) === false;
     if (!shouldBreak) return [];

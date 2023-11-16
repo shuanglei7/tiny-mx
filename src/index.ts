@@ -1,7 +1,9 @@
-import store from './base/store';
-import event from './base/event';
+import store from "./base/store";
+import event from "./base/event";
 
-export default {
+const mx = {
   store,
   event,
 };
+
+export default mx;

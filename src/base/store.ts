@@ -1,23 +1,21 @@
-import * as dataManager from '../core/dataManager';
-import { getInstance, setInstance } from '../utils/env';
+import * as dataManager from "../core/dataManager";
+import { getInstance, setInstance } from "../utils/env";
 
-const namespace = '__MX_STORE__';
-
-type RecordObject<T = any> = Record<string, T>;
+const namespace = "__MX_STORE__";
 
 export class Store {
-  private store: RecordObject = {};
+  private store: any = {};
   private asyncUpdateList: any[] = [];
   private nextTickCalls: Function[] = [];
   private attachList: any[] = [];
-  private pathChangeMap: RecordObject<Array<(data?: any) => void>> = {};
+  private pathChangeMap: any = {};
 
   private asyncUpdateTicking = false;
 
   private _addToStore(name: string, data: any) {
     if (this.store[name]) {
       console.error(
-        'you are setting store namespace [' + name + '] more than once'
+        "you are setting store namespace [" + name + "] more than once"
       );
     }
 
@@ -29,7 +27,7 @@ export class Store {
     this._updateHandler(path);
   }
 
-  private _handlePathChange(path: any) {
+  private _handlePathChange(path: string) {
     if (!this.pathChangeMap[path]) {
       return;
     }
@@ -41,7 +39,7 @@ export class Store {
   }
 
   _formatPath(path: string): string {
-    return path.split('.').join('/');
+    return path.split(".").join("/");
   }
 
   update(path: string, data: any) {
@@ -90,10 +88,10 @@ export class Store {
   }
 
   nextTick(cb: Function) {
-    typeof cb === 'function' && this.nextTickCalls.push(cb);
+    typeof cb === "function" && this.nextTickCalls.push(cb);
   }
 
-  set(subStore: RecordObject) {
+  set(subStore: any) {
     const keys = Object.keys(subStore);
     for (const i in keys) {
       const key = keys[i];
@@ -103,25 +101,25 @@ export class Store {
     this._updateHandler();
   }
 
-  get(name: any) {
+  get(name: string) {
     if (name === undefined) {
       return this.store;
     }
-    return dataManager.get(this.store, name.split('.').join('/'));
+    return dataManager.get(this.store, name.split(".").join("/"));
   }
 
   getStore() {
     return this.store;
   }
 
-  private _updateChildPath(path: any) {
+  private _updateChildPath(path: string) {
     const keys = Object.keys(this.pathChangeMap);
     for (let k in keys) {
       let key = keys[k];
       if (key !== path && key.indexOf(path) === 0) {
         for (let i = 0; i < this.pathChangeMap[key].length; i++) {
           this.pathChangeMap[key][i](
-            dataManager.get(this.store, key.split('.').join('/'))
+            dataManager.get(this.store, key.split(".").join("/"))
           );
         }
       }
@@ -130,15 +128,15 @@ export class Store {
 
   private _pathUpdate(path: any) {
     this._updateChildPath(path);
-    path = path.split('.');
-    let p = '';
+    path = path.split(".");
+    let p = "";
     for (let i in path) {
-      p += p ? '.' + path[i] : path[i];
+      p += p ? "." + path[i] : path[i];
       this._handlePathChange(p);
     }
   }
 
-  private _updateHandler(path = '') {
+  private _updateHandler(path = "") {
     //全量订阅
     for (let i in this.attachList) {
       this.attachList[i](this.store, path);
@@ -198,8 +196,8 @@ export class Store {
   }
 
   on(path: string, cb: (data: any) => any, forceInit = false) {
-    if (typeof path !== 'string') {
-      console.error('only string accept');
+    if (typeof path !== "string") {
+      console.error("only string accept");
       return;
     }
     this._addToPathChange(path, cb);
@@ -209,8 +207,8 @@ export class Store {
   }
 
   off(path: string, cb: (data: any) => any) {
-    if (typeof path !== 'string') {
-      throw new Error('store.off path only accept string');
+    if (typeof path !== "string") {
+      throw new Error("store.off path only accept string");
     }
     this._removeFromPathChange(path, cb);
   }

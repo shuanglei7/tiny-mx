@@ -3,7 +3,7 @@
  */
 interface MxEvtHandler {
   needMakeup: boolean;
-  listener: Function;
+  listener: (...args: any[]) => void;
 }
 
 export interface IEvents {
@@ -23,7 +23,7 @@ export default class EventEmitter {
    * 检查某个事件是否被监听
    * @param {string} evtName
    */
-  has(evtName: any): number | false {
+  has(evtName: string): number | false {
     if (!evtName) return false;
     return this._events[evtName] && this._events[evtName].length;
   }
@@ -32,7 +32,7 @@ export default class EventEmitter {
    * @param {string} evtName
    * @param {*} fn
    */
-  on(evtName: any, listener: any, needMakeup = true) {
+  on(evtName: string, listener: (...args: any[]) => void, needMakeup = true) {
     if (!this._events[evtName]) {
       this._events[evtName] = [];
     }
@@ -44,7 +44,7 @@ export default class EventEmitter {
    * @param {string} evtName
    * @param {*} fn 注:不传则移除所有事件
    */
-  off(evtName: any, fn: any) {
+  off(evtName: string, fn?: (...args: any[]) => void) {
     if (!fn || !this._events[evtName]) {
       this._events[evtName] = [];
       return;
@@ -61,8 +61,8 @@ export default class EventEmitter {
    */
   emit(evtParam: string | MxEvtEmitParam, ...args: any[]) {
     const evtName =
-      typeof evtParam === 'string' ? evtParam : evtParam.eventName;
-    const isMakeupCall = typeof evtParam !== 'string' && evtParam.isMakeupCall;
+      typeof evtParam === "string" ? evtParam : evtParam.eventName;
+    const isMakeupCall = typeof evtParam !== "string" && evtParam.isMakeupCall;
     const evts = this._events[evtName];
 
     if (evts) {
